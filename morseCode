@@ -1,0 +1,281 @@
+
+import tkinter as tk
+from tkinter import ttk
+import time
+from gpiozero import LED
+#import re
+import RPi.GPIO
+RPi.GPIO.setmode(RPi.GPIO.BCM)
+
+led = LED(14)
+
+timeUnit = 0.3
+
+dotLength = timeUnit
+dashLength = timeUnit*3
+symbolSpace = timeUnit
+letterSpace = (timeUnit*3) - symbolSpace
+
+
+window = tk.Tk()
+
+window.minsize(30,30)
+
+
+    
+def enter():
+    wordStr = word.get().lower()
+    validSymbols = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","w","z","0","1","2","3","4","5","6","7","8","9"]
+    
+    
+    valid = checkIfValid(wordStr,validSymbols) 
+    
+    
+    if valid:
+               
+        
+        for letterStr in wordStr:
+                morseCode(letterStr)
+                time.sleep(letterSpace)
+        
+        label["text"] = "Enter a word(max 12 letters)"
+        
+    else:
+        label["text"] = "Error, not valid word" 
+ 
+
+def checkIfValid(word, validSymbols):
+    
+    if (len(word)<13) and (word.find(' ') == -1):
+    #if (len(word)<13) and (" " in word == False):
+        if(lettersValid(word,validSymbols)):
+            return True
+        else:
+            return False
+    else:
+        return False
+    
+def lettersValid(word, validSymbols):
+    for letter in word:
+        m = False
+        for character in validSymbols:
+            
+                
+            if letter == character:
+                m = True
+            
+            
+        if not m:
+            return False
+    return True #passed the tests
+    
+        
+    
+    
+    
+    
+        
+            
+    return True #has passed the tests
+    
+    
+
+def morseCode(letterStr): 
+    if letterStr == "a":
+        dot()
+        dash()
+    elif letterStr == "b":
+        dot()
+        dot()
+        dot()
+    elif letterStr == "c":
+        dash()
+        dot()
+        dash()
+        dot()
+    elif letterStr == "d":
+        dash()
+        dot()
+        dot()
+    elif letterStr == "e":
+        dot()        
+    elif letterStr == "f":
+        dot()
+        dot()
+        dash()
+        dot()
+    elif letterStr == "g":
+        dash()
+        dash()
+        dot()
+    elif letterStr == "h":
+        dot()
+        dot()
+        dot()
+        dot()
+    elif letterStr == "i":
+        dot()
+        dot()
+    elif letterStr == "j":
+        dot()
+        dash()
+        dash()
+        dash()
+    elif letterStr == "k":
+        dash()
+        dot()
+        dash()
+    elif letterStr == "l":
+        dot()
+        dash()
+        dot()
+        dot()
+    elif letterStr == "m":
+        dash()
+        dash()
+    elif letterStr == "n":
+        dash()
+        dot()
+    elif letterStr == "o":
+        dash()
+        dash()
+        dash()
+    elif letterStr == "p":
+        dot()
+        dash()
+        dash()
+        dot()
+    elif letterStr == "q":
+        dash()
+        dash()
+        dot()
+        dash()
+    elif letterStr == "r":
+        dot()
+        dash()
+        dot()
+    elif letterStr == "s":
+        dot()
+        dot()
+        dot()
+    elif letterStr == "t":
+        dash()
+    elif letterStr == "u":
+        dot()
+        dot()
+        dash()
+    elif letterStr == "v":
+        dot()
+        dot()
+        dot()
+        dash()       
+    elif letterStr == "w":
+        dot()
+        dash()
+        dash()
+    elif letterStr == "x":
+        dash()
+        dot()
+        dot()
+        dash()
+    elif letterStr == "y":
+        dash()
+        dot()
+        dash()
+        dash()
+    elif letterStr == "z":
+        dash()
+        dash()
+        dot()
+        dot()
+    elif letterStr == "0":
+        dash()
+        dash()
+        dash()
+        dash()
+        dash()
+    elif letterStr == "1":
+        dot()
+        dash()
+        dash()
+        dash()
+        dash()
+    elif letterStr == "2":
+        dot()
+        dot()
+        dash()
+        dash()
+        dash()
+    elif letterStr == "3":
+        dot()
+        dot()
+        dot()
+        dash()
+        dash()
+    elif letterStr == "4":
+        dot()
+        dot()
+        dot()
+        dot()
+        dash()
+    elif letterStr == "5":
+        dot()
+        dot()
+        dot()
+        dot()
+        dot()
+    elif letterStr == "6":
+        dash()
+        dot()
+        dot()
+        dot()
+        dot()
+    elif letterStr == "7":
+        dash()
+        dash()
+        dot()
+        dot()
+        dot()
+    elif letterStr == "8":
+        dash()
+        dash()
+        dash()
+        dot()
+        dot()
+    elif letterStr == "9":
+        dash()
+        dash()
+        dash()
+        dash()
+        dot()
+        
+ 
+ 
+def dash(): 
+    led.on()
+    time.sleep(dashLength)
+    led.off()
+    time.sleep(symbolSpace)
+
+def dot(): 
+    led.on()
+    time.sleep(dotLength)
+    led.off()
+    time.sleep(symbolSpace)
+
+label = ttk.Label(window, text = "Enter a word(max 12 letters)")
+label.grid(column = 0, row = 0)
+
+
+
+
+word = tk.StringVar()
+wordEntered = ttk.Entry(window, width = 15, textvariable = word)
+wordEntered.grid(column = 0, row = 1)
+
+
+button = ttk.Button(window, text = "Enter", command = enter)
+button.grid(column= 0, row = 2)
+
+window.mainloop()
+
